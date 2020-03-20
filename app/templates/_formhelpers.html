@@ -1,0 +1,17 @@
+{% macro render_field(field) %}
+    {% import 'bootstrap/wtf.html' as wtf %}
+    <tr>
+        <td>{{ wtf.form_field(field) }}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="text-warning">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro render_textfield(field) %}
+    {% import 'bootstrap/wtf.html' as wtf %}
+    {{field(class="form-control", **kwargs)|safe}}
+{% endmacro %}

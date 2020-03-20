@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+</br>
+<div class="jumbotron py-2 col-md-12">
+    <h4>Subnet: {{ scan_range.subnet }}</h4>
+    <div class="content-section col-md-6 pl-0">
+        <form method="POST" action="">
+            {{ exporter_form.csrf_token }}
+            <h5>{{ exporter_form.name.label }}</h5>
+            {{ exporter_form.name(class="form-control") }}
+            <fieldset class="form-group">
+
+                <legend class="border-bottom mb-4">Exporters:</legend>
+                {% if exporter_form.exporters.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in exporter_form.exporters.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% for choice in exporter_form.exporters %}
+                    <div class="form-check">
+                        {{ choice(class="form-check-input") }}
+                        {{ choice.label(class="form-check-label") }}
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <div class="form-group">
+                {{ exporter_form.submit(class="btn btn-outline-secondary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

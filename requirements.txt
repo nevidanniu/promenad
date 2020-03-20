@@ -1,0 +1,10 @@
+git+git://github.com/cablehead/python-consul.git#egg=python-consul
+Flask
+flask_wtf
+wtforms
+Flask-APScheduler
+flask_login
+flask_ldap3_login
+Flask-Bootstrap4
+Flask-Executor
+netaddr

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    </br>
+    <div class="jumbotron  py-2">
+        <h4>Add exporter</h4>
+        <form action="" method="post" novalidate class="col-md-8 pl-0">
+            <div class="input-group">
+            {{ form.csrf_token }}
+                <span class="flex-column">
+                    {{ form.exporter_name.label }}: {{ form.exporter_name(class="form-control") }}
+                </span>
+                <span class="flex-column">
+                    {{ form.exporter_port.label }}: {{ form.exporter_port(class="form-control") }}
+                </span>
+                    {{ form.submit(class="btn btn-outline-secondary mt-auto") }}
+                <span>
+                {% if form.exporter_name.errors or form.exporter_port.errors %}
+                    {% for error in form.exporter_name.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                    {% for error in form.exporter_port.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+                </span>
+            </div>
+        </form>
+        <br>
+        <h4>Exporters</h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Exporter</th>
+                <th scope="col">Meta</th>
+                <th scope="col">Tags</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            {% for exporter in exporters %}
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <a class="btn-link font-weight-bold  text-dark" href="{{ url_for('exporters.exporter_edit',
+                                    exporter=exporter.name
+                                    ) }}">{{ exporter.name }}</a>
+                        <p><small class="text-muted">port: {{ exporter.port }}</small></p>
+                    </th>
+                    <td>
+                        {% for metakey in exporter.meta %}
+                            {{ metakey }}:{{ exporter.meta[metakey] }}{% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for tag in exporter.tags %}
+                            {{ tag }}{% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <div class="col col-md-4">
+                            <span class="dropdown">
+                            <a class="dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                <i class="fas fa-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('exporters.exporter_edit',
+                                    exporter=exporter.name
+                                    ) }}">Edit</a>
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('exporters.exporter_delete',
+                                    exporter=exporter.name
+                                    ) }}">Delete</a>
+                            </ul>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

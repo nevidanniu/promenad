@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    </br>
+    <div class="jumbotron  py-2">
+        <h4> Add scan range</h4>
+        <form action="" method="post" novalidate class="col-md-8 pl-0">
+            <div class="input-group">
+            {{ form.csrf_token }}
+            <span class="flex-column">
+                {{ form.newsubnet.label }}: {{ form.newsubnet(class="form-control") }}
+            </span>
+            <span class="flex-column">
+                {{ form.newsubnet_name.label }}: {{ form.newsubnet_name(class="form-control") }}
+            </span>
+            {{ form.submit(class="btn btn-outline-secondary mt-auto") }}
+            {% if form.newsubnet.errors or form.newsubnet_name.errors %}
+                {% for error in form.newsubnet.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+                {% for error in form.newsubnet_name.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </form>
+        <br>
+        <h4>Scan ranges</h4>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Scan range</th>
+                <th scope="col">Active exporters</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            {% for subnet in subnets %}
+                <tbody>
+                    <tr>
+                        <th scope="row">
+                            <a class="btn-link font-weight-bold text-dark" col href="{{ url_for('subnets.subnet_edit',
+                                    subnet=subnet.subnet
+                                    ) }}">{{ subnet.subnet }}</a>
+                            {% if subnet.name %}
+                            <p><small class="text-muted">{{ subnet.name }}</small></p>
+                            {% endif %}
+                        </th>
+                        <td>
+                            {% for exporter in subnet.exporters %}
+                                {{ exporter }}{% if not loop.last %}<br>{% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <div class="col col-md-4">
+                            <span class="dropdown">
+                            <a class="dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                <i class="fas fa-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('services.service_scan',
+                                    subnet=subnet.subnet
+                                    ) }}">Start Scan</a>
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('subnets.subnet_edit',
+                                    subnet=subnet.subnet
+                                    ) }}">Edit</a>
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('subnets.subnet_delete',
+                                    subnet=subnet.subnet
+                                    ) }}">Delete</a>
+                            </ul>
+                            </span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

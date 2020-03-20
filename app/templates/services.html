@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+</br>
+<div class="jumbotron  py-2">
+    <h4>Discovered services</h4>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Service</th>
+            <th scope="col">Meta</th>
+            <th scope="col">Tags</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        {% for service in services %}
+            {% if services[service].Meta["skip"] != "true" and services[service].Meta["skip"] != "True" %}
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <a class="btn-link font-weight-bold  text-dark" href="{{ url_for('services.service_edit',
+                                    service=services[service].ID
+                                    ) }}">{{ service }}</a>
+                        <p><small class="text-muted">{{ services[service].Service }}</small></p>
+                    </th>
+                    <td>
+                        {% for metakey in services[service].Meta %}
+                        {{ metakey }}:{{ services[service].Meta[metakey] }}{% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for tag in services[service].Tags %}
+                            {{ tag }}{% if not loop.last %}<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <div class="col col-md-4">
+                            <span class="dropdown">
+                            <a class="dropdown" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                                <i class="fas fa-tasks"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('services.service_skip',
+                                    service=services[service].ID,
+                                    skip=True,
+                                    urlback=url_for(request.endpoint)
+                                    ) }}">Skip</a>
+                                <a class="dropdown-item" type="button"
+                                    href="{{ url_for('services.service_edit',
+                                    service=services[service].ID
+                                    ) }}">Edit</a>
+                                <a class="dropdown-item" type="button"
+                                   href="{{ url_for('services.service_delete',
+                                    service=services[service].ID
+                                    ) }}">Delete</a>
+                            </ul>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            {% endif %}
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}
